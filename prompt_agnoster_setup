@@ -62,6 +62,9 @@ prompt_context() {
 # Git: branch/detached head, dirty status
 prompt_git() {
   local ref dirty
+  is_dirty() {
+    test -n "$(git status --porcelain --ignore-submodules)"
+  }
   if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
     ZSH_THEME_GIT_PROMPT_DIRTY='±'
     dirty=$(parse_git_dirty)
@@ -127,7 +130,7 @@ build_prompt() {
   prompt_time
   prompt_hostname
   prompt_dir
-  prompt_git
+  #prompt_git
   prompt_end
 }
 
@@ -193,7 +196,13 @@ function prompt_agnoster_setup {
 # A few utility functions to make it easy and re-usable to draw segmented prompts
 
 CURRENT_BG='NONE'
-SEGMENT_SEPARATOR='⮀'
+SEGMENT_SEPARATOR="\ue0b0"
+PLUSMINUS="\u00b1"
+BRANCH="\ue0a0"
+DETACHED="\u27a6"
+CROSS="\u2718"
+LIGHTNING="\u26a1"
+GEAR="\u2699"
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
 
